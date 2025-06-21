@@ -17,6 +17,7 @@ This tool integrates chromatin interaction data (Hi-C) with histone modification
 ## Installation
 
 ```bash
+# For authorized users only (private repository)
 git clone https://github.com/Badgerliu/EP_annotator.git
 cd EP_annotator
 pip install -r requirements.txt

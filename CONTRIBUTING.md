@@ -4,7 +4,7 @@ Thank you for your interest in contributing to EP_annotator!
 
 ## Development Setup
 
-1. Clone the repository:
+1. Clone the repository (requires access to private repo):
 ```bash
 git clone https://github.com/Badgerliu/EP_annotator.git
 cd EP_annotator
