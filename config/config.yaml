@@ -1,0 +1,53 @@
+# EP_annotator Configuration File
+# This file contains default parameters for the EP annotation pipeline
+
+# Input files
+input:
+  hicut_pairs: []  # List of HiCUT allValidPairs files
+  active_peaks: []  # List of H3K27Ac CUT&Tag BED files  
+  tss_bed: ""  # Path to TSS annotation BED file
+  query_peaks: ""  # Path to ChIP-seq peaks to annotate
+
+# Output settings
+output:
+  prefix: "ep_analysis"  # Prefix for output files
+  directory: "results"  # Output directory
+
+# Step-specific parameters
+step1:
+  # HiCUT data preparation
+  remove_duplicates: true
+  sort_output: true
+
+step2: 
+  # Peak data preparation
+  merge_overlapping: true
+  sort_peaks: true
+
+step3:
+  # Peak-interaction association
+  distance_threshold: null  # Maximum distance for association (null = no limit)
+
+step4:
+  # E-P index generation
+  promoter_window: 1000  # Window size around TSS for promoter definition
+
+step5:
+  # Peak annotation
+  detailed_output: true
+
+step6:
+  # Analysis and visualization
+  plot_format: "pdf"
+  generate_enrichment: false
+
+# Resource settings
+resources:
+  threads: 1
+  memory_gb: 8
+
+# Tool paths (optional - will use system PATH if not specified)
+tools:
+  bedtools: "bedtools"
+  awk: "awk"
+  sort: "sort" 

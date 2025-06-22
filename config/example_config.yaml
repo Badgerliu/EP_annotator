@@ -1,0 +1,45 @@
+# Example Configuration for EP_annotator
+# Copy this file and modify paths to match your data
+
+# Input files
+input:
+  hicut_pairs: 
+    - "data/E145_E_1.allValidPairs"
+    - "data/E145_E_2.allValidPairs"
+  active_peaks:
+    - "data/E145_E_H3K27ac_CUTTAG_1.bed"  
+    - "data/E145_E_H3K27ac_CUTTAG_2.bed"
+  tss_bed: "refGenome/mm10/mm10_NCBIRefSeq_refGene.bed"
+  query_peaks: "data/ARID3A_peak.bed"
+
+# Output settings
+output:
+  prefix: "ARID3A_analysis"
+  directory: "results"
+
+# Step-specific parameters
+step1:
+  remove_duplicates: true
+  sort_output: true
+
+step2: 
+  merge_overlapping: true
+  sort_peaks: true
+
+step3:
+  distance_threshold: null
+
+step4:
+  promoter_window: 1000
+
+step5:
+  detailed_output: true
+
+step6:
+  plot_format: "pdf"
+  generate_enrichment: true
+
+# Resource settings
+resources:
+  threads: 4
+  memory_gb: 16 
