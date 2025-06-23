@@ -1,0 +1,50 @@
+# EP_annotator Test Configuration
+# This configuration runs the complete pipeline from Step 1 to Step 6
+# All outputs will be saved to test_output/ directory
+
+# Input files - all located in test_data directory
+input:
+  hicut_pairs: 
+    - "test_data/test_experiment_HiCUT_union.bedpe"
+  active_peaks:
+    - "test_data/test_experiment_H3K27ac_CUTTAG_union.bed"
+  tss_bed: "refGenome/mm10/mm10_NCBIRefSeq_refGene.bed"
+  query_peaks: "test_data/sample_query_peaks.bed"  # 1000 peaks for quick testing
+
+# Output settings
+output:
+  prefix: "test_result"
+  directory: "test_output"
+
+# Step-specific parameters
+step1:
+  remove_duplicates: true
+  sort_output: true
+
+step2: 
+  merge_overlapping: true
+  sort_peaks: true
+
+step3:
+  distance_threshold: 2000  # 2kb threshold for peak-interaction association
+
+step4:
+  promoter_window: 1000     # TSS ±1kb for promoter regions
+
+step5:
+  detailed_output: true
+
+step6:
+  plot_format: "png"        # Create visualization plots
+  generate_enrichment: true
+
+# Resource settings
+resources:
+  threads: 2
+  memory_gb: 8
+
+# Pipeline settings - run all steps
+pipeline:
+  start_step: 1
+  end_step: 6
+  force_overwrite: true 

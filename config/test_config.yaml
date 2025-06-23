@@ -1,0 +1,43 @@
+# Test Configuration for EP_annotator
+# Using existing test data files
+
+# Input files - using the union files that already exist
+input:
+  hicut_pairs: 
+    - "test_run/test_experiment_HiCUT_union.bedpe"
+  active_peaks:
+    - "test_run/test_experiment_H3K27ac_CUTTAG_union.bed"
+  tss_bed: "refGenome/mm10/mm10_NCBIRefSeq_refGene.bed"
+  query_peaks: "test_run/test_experiment_H3K27ac_CUTTAG_union.bed"  # Using same file for demo
+
+# Output settings
+output:
+  prefix: "test_analysis"
+  directory: "test_output"
+
+# Step-specific parameters
+step1:
+  remove_duplicates: true
+  sort_output: true
+
+step2: 
+  merge_overlapping: true
+  sort_peaks: true
+
+step3:
+  distance_threshold: 2000
+
+step4:
+  promoter_window: 1000
+
+step5:
+  detailed_output: true
+
+step6:
+  plot_format: "pdf"
+  generate_enrichment: true
+
+# Resource settings
+resources:
+  threads: 2
+  memory_gb: 8 

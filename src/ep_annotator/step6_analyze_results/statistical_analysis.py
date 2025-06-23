@@ -211,14 +211,16 @@ def analyze_chromosome_distribution(df: pd.DataFrame, logger: logging.Logger) ->
     
     # Sort by chromosome name (natural sort)
     def chr_sort_key(chr_name):
-        if chr_name.startswith('chr'):
-            chr_name = chr_name[3:]
-        if chr_name.isdigit():
-            return (0, int(chr_name))
-        elif chr_name in ['X', 'Y']:
-            return (1, ord(chr_name))
+        # Convert to string if it's not already
+        chr_name_str = str(chr_name)
+        if chr_name_str.startswith('chr'):
+            chr_name_str = chr_name_str[3:]
+        if chr_name_str.isdigit():
+            return (0, int(chr_name_str))
+        elif chr_name_str in ['X', 'Y']:
+            return (1, ord(chr_name_str))
         else:
-            return (2, chr_name)
+            return (2, chr_name_str)
     
     sorted_chrs = sorted(chr_total_counts.keys(), key=chr_sort_key)
     

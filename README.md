@@ -159,7 +159,46 @@ The following system tools are required and must be installed separately:
 
 ## Usage
 
-### Quick Start
+### Quick Start with Test Data
+
+EP_annotator comes with sample data for testing and validation. **Before using your own data, we strongly recommend running the test pipeline to understand the complete workflow.**
+
+#### 🎯 Recommended First Steps
+
+```bash
+# 1. FIRST: Study the example configuration and script
+cat test_data/test_config.yaml     # Understand configuration structure
+cat test_data/run_test.sh          # See complete pipeline execution
+
+# 2. Run the complete test pipeline
+bash test_data/run_test.sh
+
+# 3. Alternative: Run step by step with verbose output
+python scripts/run_pipeline.py -c test_data/test_config.yaml -v
+
+# Expected runtime: 2-5 minutes
+# Expected output: 16 files including data, reports, and visualizations
+```
+
+#### 📊 Test Data Contents
+
+The test data includes:
+- **3.3M Hi-C interactions** (~93MB) - Real experimental data
+- **219K H3K27Ac peaks** (~5MB) - CUT&Tag peaks from mouse tissue
+- **1K query peaks** for annotation - Sample ChIP-seq peaks
+- **Complete configuration** (`test_config.yaml`) - Template for your projects
+- **Automated test script** (`run_test.sh`) - Complete pipeline example
+
+#### 📖 Essential Reading
+
+- **`test_data/test_config.yaml`** - Configuration file template with comments
+- **`test_data/run_test.sh`** - Complete pipeline execution example  
+- **`test_data/README.md`** - Detailed testing instructions and expected results
+- **`test_output/PIPELINE_TEST_SUMMARY.md`** - Complete test results (generated after running)
+
+**💡 Pro Tip**: Use these test files as templates for your own analysis!
+
+### Using Your Own Data
 
 ```bash
 # Copy and modify the example configuration
@@ -171,6 +210,141 @@ python scripts/run_pipeline.py -c my_config.yaml
 
 # Or run individual steps
 python scripts/run_pipeline.py -c my_config.yaml -s 1  # Step 1 only
+```
+
+### Complete Pipeline Execution
+
+EP_annotator provides multiple ways to run the complete 6-step pipeline. For first-time users, we recommend examining the test configuration and script as examples.
+
+#### 📚 Learning from Examples
+
+Before running your own data, please review these example files:
+
+```bash
+# 1. Examine the test configuration file
+cat test_data/test_config.yaml
+
+# 2. Study the complete pipeline test script
+cat test_data/run_test.sh
+
+# 3. Run the example to understand the workflow
+./test_data/run_test.sh
+```
+
+These files demonstrate:
+- **Configuration structure**: How to organize input/output paths and parameters
+- **Pipeline execution**: Complete Steps 1-6 with real data
+- **Expected outputs**: What files are generated at each step
+- **Performance benchmarks**: Typical runtime and resource usage
+
+#### 🚀 Running Your Complete Pipeline
+
+**Method 1: Configuration File Approach (Recommended)**
+
+```bash
+# 1. Create your configuration file based on the example
+cp test_data/test_config.yaml my_project_config.yaml
+
+# 2. Edit the configuration with your data paths
+nano my_project_config.yaml  # or use your preferred editor
+
+# 3. Run the complete pipeline (Steps 1-6)
+python scripts/run_pipeline.py -c my_project_config.yaml -v
+
+# Expected runtime: 2-10 minutes depending on data size
+# Output: 15+ files including data, annotations, and visualizations
+```
+
+**Method 2: Command Line with Individual Steps**
+
+```bash
+# Run each step individually for debugging or custom workflows
+python scripts/run_pipeline.py -c my_config.yaml -s 1 -v  # Prepare interactions
+python scripts/run_pipeline.py -c my_config.yaml -s 2 -v  # Prepare peaks  
+python scripts/run_pipeline.py -c my_config.yaml -s 3 -v  # Associate peaks
+python scripts/run_pipeline.py -c my_config.yaml -s 4 -v  # Generate E-P index
+python scripts/run_pipeline.py -c my_config.yaml -s 5 -v  # Annotate query peaks
+python scripts/run_pipeline.py -c my_config.yaml -s 6 -v  # Statistical analysis
+```
+
+#### 📋 Configuration File Structure
+
+Your configuration file should include the following sections:
+
+```yaml
+# Input files
+input:
+  hicut_pairs:                    # List of Hi-C interaction files
+    - "data/sample1.allValidPairs"
+    - "data/sample2.allValidPairs"
+  active_peaks:                   # List of H3K27Ac peak files
+    - "data/sample1_H3K27ac.bed"
+    - "data/sample2_H3K27ac.bed"
+  tss_bed: "refGenome/mm10/mm10_NCBIRefSeq_refGene.bed"  # TSS annotation
+  query_peaks: "data/my_chipseq_peaks.bed"              # Your ChIP-seq peaks
+
+# Output settings
+output:
+  prefix: "my_experiment"         # Output file prefix
+  directory: "results"            # Output directory
+
+# Step-specific parameters (optional)
+step3:
+  distance_threshold: 2000        # Distance threshold for peak association
+step4:
+  promoter_window: 1000          # TSS ±1kb for promoter definition
+step6:
+  plot_format: "png"             # Visualization format
+```
+
+#### 🔍 Pipeline Validation
+
+After running your pipeline, validate the results:
+
+```bash
+# Check output directory
+ls -la results/
+
+# Verify core output files exist:
+# - {prefix}_interactions.bedpe          # Step 1 output
+# - {prefix}_peaks.bed                   # Step 2 output  
+# - {prefix}_associated.bedpe            # Step 3 output
+# - {prefix}_index.bedpe.gz              # Step 4 output
+# - {prefix}_peak_annotation.tsv         # Step 5 output
+# - {prefix}_comprehensive_statistics.txt # Step 6 output
+
+# View summary statistics
+head -20 results/my_experiment_comprehensive_statistics.txt
+
+# Check visualization plots
+ls results/*.png
+```
+
+#### ⚡ Performance Tips
+
+- **Memory**: Allocate 8-16GB RAM for large datasets (>1M interactions)
+- **Storage**: Ensure 2-5x input data size for temporary and output files
+- **CPU**: The pipeline benefits from multi-core systems (Steps 3-4)
+- **Time**: Typical runtime is 2-10 minutes for datasets <5M interactions
+
+#### 🚨 Troubleshooting
+
+If the pipeline fails:
+
+```bash
+# 1. Check system dependencies
+bedtools --version
+python -c "import pandas, pybedtools; print('Dependencies OK')"
+
+# 2. Validate input file formats
+head -5 your_hicut_file.allValidPairs
+head -5 your_peaks.bed
+
+# 3. Run with verbose output for debugging
+python scripts/run_pipeline.py -c my_config.yaml -v
+
+# 4. Test with smaller datasets first
+# 5. Check log messages for specific error details
 ```
 
 ### Python API Usage
