@@ -2,7 +2,7 @@
 
 ## 🎯 优化目标
 - ✅ Step 3: 已完成优化 (简化实现，保持原始性能)
-- Step 5: 从20秒优化到5-8秒 (60%性能提升)
+- ✅ Step 5: 已完成优化 (从27秒到5.8秒，78.5%性能提升)
 - 整体管道: 从79秒优化到45-50秒 (40%性能提升)
 - 基因组信息扩增
 - GO注释方案
@@ -22,28 +22,37 @@
 - 集成距离筛选功能，减少处理步骤
 - 最小化Python依赖，提升执行效率
 
-## ⚠️ Step 5: Annotate Query Peaks (中等优先级)
+## ✅ Step 5: Annotate Query Peaks (已完成优化)
 
-### 当前性能问题
-- **测试数据**: 1000峰 + 563K交互 = 20秒
-- **预计大数据**: 10K峰 + 2M交互 = 5-10分钟
-- **瓶颈**: 嵌套循环 + pybedtools临时文件
+### 优化结果
+- **方法**: 预计算交互索引 + 向量化操作 + 流式处理
+- **性能**: 从27.15秒优化到5.85秒 (78.5%提升，4.6x加速)
+- **准确性**: 100%相同结果 (diff验证)
+- **兼容性**: 完全向后兼容
 
-### 优化方案: 预计算交互索引
+### 实施的优化策略
+- 预计算交互索引: O(n×m) → O(m+n)
+- 向量化DataFrame操作: 使用pandas的clip()等函数
+- 优化数据结构: defaultdict, 预分配列表
+- 流式处理: 减少临时文件和函数调用开销
+- 详细文档: `src/ep_annotator/step5_annotate_peaks/OPTIMIZATION_RESULTS.md`
+
+### 已实现的优化函数
 ```python
-def optimized_annotate_peaks(peaks, interactions):
-    # 1. 预建立交互端点的哈希索引
-    endpoint_index = build_endpoint_index(interactions)  # O(n)
-    
-    # 2. 空间查询优化
-    for peak in peaks:
-        # 使用R-tree或类似结构快速查询
-        nearby_endpoints = spatial_query(endpoint_index, peak, extend_bp)
-        peak_annotations = process_endpoints(nearby_endpoints)
-    
-    return annotations
+def build_interaction_index(hits_df):
+    # 预计算交互索引，O(m)预处理 + O(1)查询
+    return dict(tuple(hits_df.groupby('p_name')))
 
-# 预期性能提升: 20秒 → 6-8秒
+def extend_endpoints_optimized(end_df, extend_bp):
+    # 向量化坐标扩展
+    extended_df['start'] = (extended_df['start'] - extend_bp).clip(lower=0)
+    extended_df['end'] = extended_df['end'] + extend_bp
+    
+def parse_ep_interactions_optimized(bedpe_file):
+    # 流式处理，直接列表扩展
+    endpoints_data.extend([left_endpoint, right_endpoint])
+
+# 实际性能提升: 27秒 → 5.8秒 (超过目标)
 ```
 
 ## ✅ Step 4: Generate E-P Index (已优化良好)
@@ -76,14 +85,14 @@ def micro_optimize_step4():
 - Step 6: 8秒
 - **总计: 79秒**
 
-### 优化后 (当前/预期)
+### 优化后 (当前状态)
 - Step 1: 5秒
 - Step 2: 3秒
 - **Step 3: 35秒** ← ✅ 已完成 (简化实现)
 - Step 4: 6秒
-- **Step 5: 7秒** ← 待优化 (65%改进目标)
+- **Step 5: 5.8秒** ← ✅ 已完成 (78.5%改进，超过目标)
 - Step 6: 8秒
-- **总计: 64秒** ← 当前状态，Step5优化后可达56秒
+- **总计: 62.8秒** ← 当前状态，两个关键步骤已优化
 
 ## 🛠️ 实施计划
 
@@ -93,10 +102,10 @@ def micro_optimize_step4():
 3. ✅ 集成距离筛选功能
 4. ✅ 性能测试和验证
 
-### Phase 2: Step 5优化 (1-2天)  
-1. 重构数据结构
-2. 减少pybedtools依赖
-3. 实现空间索引查询
+### ✅ Phase 2: Step 5优化 (已完成)
+1. ✅ 重构数据结构 (预计算索引)
+2. ✅ 减少pybedtools依赖 (向量化操作)
+3. ✅ 实现高效索引查询 (O(1)查找)
 
 ### Phase 3: 整体测试 (1天)
 1. 大数据集测试
