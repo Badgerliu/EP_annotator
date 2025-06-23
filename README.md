@@ -130,20 +130,23 @@ python scripts/run_pipeline.py --help
 EP_annotator requires Python 3.7+ and the following packages:
 
 #### Core Dependencies
-- **pandas>=1.3.0**: Required for Step 2 pure Python implementation and data processing
-- **numpy>=1.21.0**: Required by pandas and for numerical operations  
-- **pybedtools>=0.9.0**: Required for Step 5 peak annotation
-- **intervaltree>=3.0.0**: Required for Step 4 interval operations
-- **tqdm>=4.60.0**: Required for progress bars in annotation steps
+- **pandas>=1.3.0**: Required for data processing across multiple steps (Steps 2, 3, 5, 6)
+- **numpy>=1.21.0**: Required by pandas and for numerical operations
+- **pybedtools>=0.9.0**: Required for genomic interval operations (Steps 3, 5)
+- **intervaltree>=3.0.0**: Required for efficient interval operations (Steps 3, 4)
+- **tqdm>=4.60.0**: Required for progress bars in annotation steps (Step 4)
 - **PyYAML>=5.4.0**: For configuration file parsing
 
-#### Visualization Dependencies
-- **matplotlib>=3.4.0**: For generating plots and statistical visualizations
-- **seaborn>=0.11.0**: For enhanced statistical plots
+#### Visualization and Analysis Dependencies
+- **matplotlib>=3.4.0**: For generating plots and statistical visualizations (Steps 5, 6)
+- **seaborn>=0.11.0**: For enhanced statistical plots and data visualization (Steps 5, 6)
+- **scipy>=1.7.0**: For advanced statistical analysis (Step 6, optional)
 
-#### Optional Dependencies
-- **jupyter>=1.0.0**: For interactive analysis and development
-- **scipy>=1.7.0**: For advanced statistical analysis
+#### Development and Testing Dependencies
+- **pytest>=6.0.0**: For unit testing
+- **black>=21.0.0**: For code formatting
+- **flake8>=3.9.0**: For code linting
+- **jupyter>=1.0.0**: For interactive analysis and development (optional)
 
 ### System Dependencies
 
