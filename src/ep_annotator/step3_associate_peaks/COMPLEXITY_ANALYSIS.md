@@ -149,13 +149,13 @@ def run_associate_peaks(interaction_file, peak_file, output_file):
 | 简化Python | 120 | 低 | 快 | 低 | **完整功能** |
 | 当前Python | 427 | 高 | 慢 | 高 | 过度功能 |
 
-**结论：简化版本可以保持90%的原始性能，同时实现Python集成的目标。**
+**Conclusion: The simplified version maintains 90% of the original performance while achieving Python integration goals.**
 
-## 距离筛选功能对比
+## Distance Filtering Feature Comparison
 
-原始workflow中的距离筛选步骤：
+Distance filtering step in the original workflow:
 ```bash
-# 筛选：保留两个端点距离最近peak都小于2kb的互作
+# Filter: Keep interactions where both endpoints are within 2kb of nearest peaks
 awk '$8 < 2000 && $12 < 2000' E145_E_HiCUT_with_peaks.bedpe > E145_E_HiCUT_with_peaks_near2k.bedpe
 ```
 
@@ -186,4 +186,4 @@ awk '$8 < 2000 && $12 < 2000' E145_E_HiCUT_with_peaks.bedpe > E145_E_HiCUT_with_
 | 集成度 | 分离 | 集成 | 过度集成 |
 | 性能 | 最优 | 接近最优 | 较差 |
 
-**推荐**：使用简化Python版本，既保持了原始逻辑的简洁性，又实现了步骤集成。 
+**Recommendation**: Use the simplified Python version, which maintains the simplicity of the original logic while achieving step integration. 

@@ -68,7 +68,7 @@ def associate_peaks_simple(interaction_file, peak_file, output_file, distance_th
     
     # Apply distance filtering if specified (like original workflow)
     if distance_threshold:
-        print(f"应用距离筛选：< {distance_threshold} bp")
+        print(f"Applying distance filtering: < {distance_threshold} bp")
         unfiltered_file = output_file.replace('.bedpe', '_unfiltered.bedpe')
         os.rename(output_file, unfiltered_file)
         
@@ -83,15 +83,15 @@ def associate_peaks_simple(interaction_file, peak_file, output_file, distance_th
         
         # Count after filtering and report
         filtered_count = int(subprocess.check_output(f'wc -l < "{output_file}"', shell=True).decode().strip())
-        print(f"筛选前: {unfiltered_count:,} 条互作")
-        print(f"筛选后: {filtered_count:,} 条互作 ({filtered_count/unfiltered_count*100:.1f}%)")
+        print(f"Before filtering: {unfiltered_count:,} interactions")
+        print(f"After filtering: {filtered_count:,} interactions ({filtered_count/unfiltered_count*100:.1f}%)")
         
         # Cleanup unfiltered file
         os.remove(unfiltered_file)
     
     # Count and report final results
     line_count = int(subprocess.check_output(f'wc -l < "{output_file}"', shell=True).decode().strip())
-    print(f"✅ 完成！写入 {line_count:,} 条互作到 {output_file}")
+    print(f"✅ Complete! Wrote {line_count:,} interactions to {output_file}")
     
     return output_file
 
@@ -99,14 +99,14 @@ def associate_peaks_simple(interaction_file, peak_file, output_file, distance_th
 def main():
     """Simple command line interface - mimics original script usage."""
     if len(sys.argv) < 4 or len(sys.argv) > 6:
-        print("Usage: python associate_peaks_simple.py <interaction_file> <peak_file> <output_file> [distance_threshold]")
+        print("Usage: python associate_peaks.py <interaction_file> <peak_file> <output_file> [distance_threshold]")
         print("")
         print("Examples:")
         print("  # Basic association")
-        print("  python associate_peaks_simple.py E145_E_HiCUT_union.bedpe E145_E_H3K27ac_CUTTAG_union.bed output.bedpe")
+        print("  python associate_peaks.py E145_E_HiCUT_union.bedpe E145_E_H3K27ac_CUTTAG_union.bed output.bedpe")
         print("")
         print("  # With distance filtering (like original 2kb filter)")
-        print("  python associate_peaks_simple.py E145_E_HiCUT_union.bedpe E145_E_H3K27ac_CUTTAG_union.bed output.bedpe 2000")
+        print("  python associate_peaks.py E145_E_HiCUT_union.bedpe E145_E_H3K27ac_CUTTAG_union.bed output.bedpe 2000")
         sys.exit(1)
     
     interaction_file = sys.argv[1]

@@ -66,7 +66,7 @@ def associate_interactions_with_peaks(
     """
     # Use simplified implementation for better performance
     if verbose:
-        print(f"Using simplified bedtools implementation for step3...")
+        print(f"Using simplified bedtools implementation for step 3...")
     
     return associate_peaks_main(
         interaction_file=interaction_file,
