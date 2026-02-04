@@ -404,7 +404,7 @@ Only requires:
 
 ## Contact
 
-For questions and support, please contact: liu.huand@gmail.com
+For questions and support, please contact: liu.huan@whu.edu.cn
 
 ## Development Status
 
