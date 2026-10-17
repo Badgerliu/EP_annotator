@@ -1,0 +1,14 @@
+{
+  "title": "EP_annotator: Annotating enhancer-promoter interactions using Hi-C and CUT&Tag data",
+  "creators": [
+    {
+      "person_or_org": { "family_name": "Liu", "given_name": "Huan", "type": "personal" },
+      "affiliations": [{ "name": "Wuhan University" }]
+    }
+  ],
+  "description": "<p>EP_annotator is a bioinformatics tool for annotating enhancer&ndash;promoter (EP) interactions by integrating Hi-C chromatin interaction data with CUT&amp;Tag histone modification signals (H3K27ac). It implements a six-step workflow that takes raw HiCUT allValidPairs files and CUT&amp;Tag BED files as input and produces annotated EP interaction maps, supporting the mouse genome (mm10).</p>",
+  "resource_type": { "id": "software" },
+  "license": { "id": "mit" },
+  "publisher": "Zenodo",
+  "keywords": ["Hi-C", "CUT&Tag", "enhancer-promoter interactions", "H3K27ac", "mouse genome", "bioinformatics"]
+}
